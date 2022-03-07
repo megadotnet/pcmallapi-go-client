@@ -25,7 +25,7 @@ func TestGetAbout(t *testing.T) {
 	data, r, err := client.AboutApi.ApiServicesAppAboutDetailPost(context.Background())
 
 	if err != nil {
-		t.Errorf("Error while get about")
+		t.Errorf("Error while get about detail")
 		t.Log(err)
 	}
 	if r.StatusCode != 200 {
@@ -33,5 +33,35 @@ func TestGetAbout(t *testing.T) {
 	}
 	if r.StatusCode == 200 {
 		t.Log(data)
+	}
+}
+
+// Test we can concurrently create, retrieve, update, and delete.
+func TestConcurrency(t *testing.T) {
+	errc := make(chan error)
+
+	// get the about
+	sum := 0
+	for i := 0; i <= 100; i++ {
+		go func() {
+			data, r, err := client.AboutApi.ApiServicesAppAboutDetailPost(context.Background())
+			if r.StatusCode != 200 {
+				t.Log(r)
+				t.Log(data)
+			}
+			errc <- err
+		}()
+		sum++
+	}
+	waitOnFunctions(t, errc, sum)
+}
+
+func waitOnFunctions(t *testing.T, errc chan error, n int) {
+	for i := 0; i < n; i++ {
+		err := <-errc
+		if err != nil {
+			t.Errorf("Error performing concurrent test")
+			t.Log(err)
+		}
 	}
 }
