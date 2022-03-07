@@ -1,0 +1,10 @@
+# WctApiPickUpStationDtoPostPickUpStationsOutput
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**TenantId** | **int32** |  | [optional] [default to null]
+**Stations** | [**[]WctAdminPickUpStationPickUpStations**](WCT.Admin.PickUpStation.PickUpStations.md) |  | [optional] [default to null]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
