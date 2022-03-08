@@ -9,10 +9,17 @@
 package swagger
 
 type WctApiModelsTokenAuthAuthenticateResultModel struct {
-	MemberToken string `json:"MemberToken,omitempty"`
-	AccessToken string `json:"AccessToken,omitempty"`
-	RefreshToken string `json:"RefreshToken,omitempty"`
-	EncryptedAccessToken string `json:"EncryptedAccessToken,omitempty"`
-	UserId int64 `json:"UserId,omitempty"`
-	PhoneNumber string `json:"PhoneNumber,omitempty"`
+	Result struct {
+		MemberToken          interface{} `json:"memberToken"`
+		AccessToken          string      `json:"accessToken"`
+		RefreshToken         string      `json:"refreshToken"`
+		EncryptedAccessToken string      `json:"encryptedAccessToken"`
+		UserID               int         `json:"userId"`
+		PhoneNumber          string      `json:"phoneNumber"`
+	} `json:"result"`
+	TargetURL           interface{} `json:"targetUrl"`
+	Success             bool        `json:"success"`
+	Error               interface{} `json:"error"`
+	UnAuthorizedRequest bool        `json:"unAuthorizedRequest"`
+	Abp                 bool        `json:"__abp"`
 }

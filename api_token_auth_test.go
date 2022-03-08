@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/antihax/optional"
+	"github.com/stretchr/testify/assert"
 	"golang.org/x/net/context"
 )
 
@@ -23,16 +24,17 @@ func TestLogin(t *testing.T) {
 		Body: optional.NewInterface(loginModel),
 	}
 
-	data, r, err := client.TokenAuthApi.ApiTokenAuthAuthenticatePost(context.Background(), &loginModelpost)
-
+	resp, r, err := client.TokenAuthApi.ApiTokenAuthAuthenticatePost(context.Background(), &loginModelpost)
+	assert := assert.New(t)
 	if err != nil {
 		t.Errorf("Error while get Login")
 		t.Log(err)
+	} else {
+		assert.NotNil(resp.Result.AccessToken, "AccessToken should  not be null")
+		//t.Log(resp.Result)
 	}
 	if r.StatusCode != 200 {
 		t.Log(err)
 	}
-	if r.StatusCode == 200 {
-		t.Log(data)
-	}
+
 }
