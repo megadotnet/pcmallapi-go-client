@@ -4,6 +4,7 @@ import (
 	sw "app/swagger"
 	"encoding/base64"
 	"math/rand"
+	"net/http"
 	"strconv"
 	"testing"
 	"time"
@@ -47,22 +48,12 @@ func TestLogin(t *testing.T) {
 
 func TestRegister(t *testing.T) {
 
-	registerModel := sw.WctApiApplicationAuthorizationDtoRegisterModel{
-		BindAccount: ACCOUNT_PREFIX + strconv.Itoa(GenerateRandInt(1, 9999999)),
-		SmsCode:     SMS_CODE,
-		Password:    "@234qwer"}
-
-	registerModelpost := sw.TokenAuthApiApiTokenAuthRegisterPostOpts{
-		Body: optional.NewInterface(registerModel),
-	}
-
-	resp, r, err := client.TokenAuthApi.ApiTokenAuthRegisterPost(context.Background(), &registerModelpost)
+	resp, r, err := CreateRegisterProc(t)
 	assert := assert.New(t)
 	if err != nil {
 		t.Errorf("Error while get TestRegister")
 		t.Log(err)
 	} else {
-		t.Log(registerModel.BindAccount)
 		assert.NotNil(resp, "Result should  not be null")
 	}
 	if r.StatusCode != 200 {
@@ -70,26 +61,12 @@ func TestRegister(t *testing.T) {
 	}
 }
 
-func GenerateRandInt(min, max int) int {
-	rand.Seed(time.Now().UnixNano()) //随机种子
-	return rand.Intn(max-min) + min
-}
-
 func TestRegisterConcurrency(t *testing.T) {
 	errc := make(chan error)
 	sum := 0
-	for i := 0; i <= 1000; i++ {
+	for i := 0; i <= 10; i++ {
 		go func() {
-			registerModel := sw.WctApiApplicationAuthorizationDtoRegisterModel{
-				BindAccount: ACCOUNT_PREFIX + strconv.Itoa(GenerateRandInt(1, 9999999)),
-				SmsCode:     SMS_CODE,
-				Password:    "@234qwer"}
-
-			registerModelpost := sw.TokenAuthApiApiTokenAuthRegisterPostOpts{
-				Body: optional.NewInterface(registerModel),
-			}
-
-			resp, r, err := client.TokenAuthApi.ApiTokenAuthRegisterPost(context.Background(), &registerModelpost)
+			resp, r, err := CreateRegisterProc(t)
 			if err != nil {
 				t.Errorf("Error while get TestRegister")
 				t.Log(err, r, resp)
@@ -100,4 +77,24 @@ func TestRegisterConcurrency(t *testing.T) {
 
 	}
 	waitOnFunctions(t, errc, sum)
+}
+
+//create random customer accout by phonenumber
+func CreateRegisterProc(t *testing.T) (bool, *http.Response, error) {
+	registerModel := sw.WctApiApplicationAuthorizationDtoRegisterModel{
+		BindAccount: ACCOUNT_PREFIX + strconv.Itoa(GenerateRandInt(1, 9999999)),
+		SmsCode:     SMS_CODE,
+		Password:    "@234qwer"}
+
+	registerModelpost := sw.TokenAuthApiApiTokenAuthRegisterPostOpts{
+		Body: optional.NewInterface(registerModel),
+	}
+	t.Log(registerModel.BindAccount)
+
+	return client.TokenAuthApi.ApiTokenAuthRegisterPost(context.Background(), &registerModelpost)
+}
+
+func GenerateRandInt(min, max int) int {
+	rand.Seed(time.Now().UnixNano()) //随机种子
+	return rand.Intn(max-min) + min
 }
