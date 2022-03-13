@@ -15,8 +15,8 @@ import (
 	"golang.org/x/net/context"
 )
 
-const SMS_CODE string = "898017"
-const ACCOUNT_PREFIX string = "+218 91"
+const SMScode string = "898017"
+const ACCOUNTPREFIX string = "+218 91"
 const PASSWORD string = "@234qwer"
 
 func TestLogin(t *testing.T) {
@@ -25,7 +25,7 @@ func TestLogin(t *testing.T) {
 		LoginType: 0,
 		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
 		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
-		SmsCode:   SMS_CODE,
+		SmsCode:   SMScode,
 		ImageKey:  "2323",
 		ImageCode: "8980"}
 
@@ -86,7 +86,7 @@ func CreateRegisterProc(t *testing.T) (bool, *http.Response, error) {
 
 	registerModel := sw.WctApiApplicationAuthorizationDtoRegisterModel{
 		BindAccount: RandStringBytesMaskImprSrcSB(16) + "@gmail.com",
-		SmsCode:     SMS_CODE,
+		SmsCode:     SMScode,
 		Password:    PASSWORD}
 
 	registerModelpost := sw.TokenAuthApiApiTokenAuthRegisterPostOpts{
@@ -98,7 +98,7 @@ func CreateRegisterProc(t *testing.T) (bool, *http.Response, error) {
 }
 
 func GeneratePhoneNumber() string {
-	return ACCOUNT_PREFIX + strconv.Itoa(GenerateRandInt(1, 9999999))
+	return ACCOUNTPREFIX + strconv.Itoa(GenerateRandInt(1, 9999999))
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
