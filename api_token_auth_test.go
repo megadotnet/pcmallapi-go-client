@@ -16,14 +16,15 @@ import (
 )
 
 const SMS_CODE string = "898017"
-const ACCOUNT_PREFIX = "+218 91"
+const ACCOUNT_PREFIX string = "+218 91"
+const PASSWORD string = "@234qwer"
 
 func TestLogin(t *testing.T) {
 
 	loginModel := sw.WctApiModelsTokenAuthAuthenticateModel{
 		LoginType: 0,
-		UserName:  base64.StdEncoding.EncodeToString([]byte("kmdxdk1@hotmail.com")),
-		Password:  base64.StdEncoding.EncodeToString([]byte("1234qwer")),
+		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
+		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
 		SmsCode:   SMS_CODE,
 		ImageKey:  "2323",
 		ImageCode: "8980"}
@@ -84,9 +85,9 @@ func TestRegisterConcurrency(t *testing.T) {
 func CreateRegisterProc(t *testing.T) (bool, *http.Response, error) {
 
 	registerModel := sw.WctApiApplicationAuthorizationDtoRegisterModel{
-		BindAccount: RandStringBytesMaskImprSrcSB(10) + "@gmail.com",
+		BindAccount: RandStringBytesMaskImprSrcSB(16) + "@gmail.com",
 		SmsCode:     SMS_CODE,
-		Password:    "@234qwer"}
+		Password:    PASSWORD}
 
 	registerModelpost := sw.TokenAuthApiApiTokenAuthRegisterPostOpts{
 		Body: optional.NewInterface(registerModel),
