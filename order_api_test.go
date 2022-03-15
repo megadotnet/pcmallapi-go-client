@@ -5,27 +5,27 @@ import (
 	"testing"
 
 	"github.com/antihax/optional"
-	//"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 	"golang.org/x/net/context"
 )
 
 func TestOrderLogisticsSearch(t *testing.T) {
 
 	ordersearchModel := sw.AbpApplicationServicesDtoEntityDto1SystemInt64{
-		Id: 25029416043905024}
+		Id: 25228443550859264}
 
 	ordersearchModelpost := sw.OrderApiApiServicesAppOrderLogisticsSearchPostOpts{
 		Body: optional.NewInterface(ordersearchModel),
 	}
 
 	resp, r, err := client.OrderApi.ApiServicesAppOrderLogisticsSearchPost(context.Background(), &ordersearchModelpost)
-	//	assert := assert.New(t)
+	assert := assert.New(t)
 	if err != nil {
-		t.Errorf("Error while get Login")
+		t.Errorf("Error while order search")
 		t.Log(err)
 	} else {
-		//assert.NotNil(resp.Result, "Result should  not be null")
-		t.Log(resp)
+		assert.NotNil(resp.Result, "Result should  not be null")
+		t.Log(resp.Result)
 	}
 	if r.StatusCode != 200 {
 		t.Log(err)

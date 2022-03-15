@@ -13,7 +13,7 @@ import (
 )
 
 type WctApiApplicationOrderDtoOrderExpressDto struct {
-	Result struct {
+	Result []struct {
 		// 快递公司
 		ExpressId int32 `json:"ExpressId,omitempty"`
 		// 快递单号

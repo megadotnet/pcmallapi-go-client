@@ -37,13 +37,13 @@ type OrderApiApiServicesAppOrderLogisticsSearchPostOpts struct {
 	Body optional.Interface
 }
 
-func (a *OrderApiService) ApiServicesAppOrderLogisticsSearchPost(ctx context.Context, localVarOptionals *OrderApiApiServicesAppOrderLogisticsSearchPostOpts) ([]WctApiApplicationOrderDtoOrderExpressDto, *http.Response, error) {
+func (a *OrderApiService) ApiServicesAppOrderLogisticsSearchPost(ctx context.Context, localVarOptionals *OrderApiApiServicesAppOrderLogisticsSearchPostOpts) (WctApiApplicationOrderDtoOrderExpressDto, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
 		localVarFileName    string
 		localVarFileBytes   []byte
-		localVarReturnValue []WctApiApplicationOrderDtoOrderExpressDto
+		localVarReturnValue WctApiApplicationOrderDtoOrderExpressDto
 	)
 
 	// create path and map variables
