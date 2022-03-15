@@ -64,7 +64,7 @@ func TestRegister(t *testing.T) {
 func TestRegisterConcurrency(t *testing.T) {
 	errc := make(chan error)
 	sum := 0
-	for i := 0; i <= 10; i++ {
+	for i := 0; i <= 200; i++ {
 		go func() {
 			resp, r, err := CreateRegisterProc(t)
 			if err != nil {
