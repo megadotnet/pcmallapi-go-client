@@ -42,7 +42,7 @@ func TestConcurrency(t *testing.T) {
 
 	// get the about
 	sum := 0
-	for i := 0; i <= 10; i++ {
+	for i := 0; i <= 1; i++ {
 		go func() {
 			data, r, err := client.AboutApi.ApiServicesAppAboutDetailPost(context.Background())
 			if r.StatusCode != 200 {
