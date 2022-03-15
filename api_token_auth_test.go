@@ -2,7 +2,6 @@ package main
 
 import (
 	sw "app/swagger"
-	"encoding/base64"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -38,13 +37,7 @@ func TestLogin(t *testing.T) {
 
 func LoginProc() (sw.WctApiModelsTokenAuthAuthenticateResultModel, *http.Response, error) {
 
-	loginModel := sw.WctApiModelsTokenAuthAuthenticateModel{
-		LoginType: 0,
-		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
-		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
-		SmsCode:   SMScode,
-		ImageKey:  "2323",
-		ImageCode: "8980"}
+	loginModel := CreateLoginModel()
 
 	loginModelpost := sw.TokenAuthApiApiTokenAuthAuthenticatePostOpts{
 		Body: optional.NewInterface(loginModel),

@@ -23,13 +23,8 @@ func TestMain(m *testing.M) {
 	cfg := sw.NewConfiguration()
 	//cfg.Host = testHost
 
-	loginModel := sw.WctApiModelsTokenAuthAuthenticateModel{
-		LoginType: 0,
-		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
-		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
-		SmsCode:   SMScode,
-		ImageKey:  "2323",
-		ImageCode: "8980"}
+	//login
+	loginModel := CreateLoginModel()
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -41,7 +36,7 @@ func TestMain(m *testing.M) {
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", "https://lby-stage.flyhome.net/almadar-stage/libya-mall-backend-api/api/TokenAuth/Authenticate", body)
+	req, err := http.NewRequest("POST", cfg.BasePath+"api/TokenAuth/Authenticate", body)
 	if err != nil {
 		// handle err
 	}
@@ -57,9 +52,7 @@ func TestMain(m *testing.M) {
 		fmt.Print(err)
 	}
 	//fmt.Printf("read resp.Body successfully:\n%v\n", string(localVarBody))
-
 	var respObj sw.WctApiModelsTokenAuthAuthenticateResultModel
-
 	jsonerr := json.Unmarshal(localVarBody, &respObj)
 	if jsonerr != nil {
 		fmt.Println("error:", jsonerr)
@@ -70,6 +63,16 @@ func TestMain(m *testing.M) {
 	client = sw.NewAPIClient(cfg)
 	retCode := m.Run()
 	os.Exit(retCode)
+}
+
+func CreateLoginModel() sw.WctApiModelsTokenAuthAuthenticateModel {
+	return sw.WctApiModelsTokenAuthAuthenticateModel{
+		LoginType: 0,
+		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
+		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
+		SmsCode:   SMScode,
+		ImageKey:  "2323",
+		ImageCode: "8980"}
 }
 
 func TestGetAbout(t *testing.T) {
