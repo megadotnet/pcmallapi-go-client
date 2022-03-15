@@ -2,6 +2,13 @@ package main
 
 import (
 	sw "app/swagger"
+	"bytes"
+	"crypto/tls"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"testing"
 
@@ -10,12 +17,56 @@ import (
 
 var client *sw.APIClient
 
-const testHost = "lby-stage.flyhome.net/almadar-stage/libya-mall-backend-api"
+//const testHost = "lby-stage.flyhome.net/almadar-stage/libya-mall-backend-api"
 
 func TestMain(m *testing.M) {
 	cfg := sw.NewConfiguration()
-	cfg.AddDefaultHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjU3Iiwic3ViIjoiNTciLCJqdGkiOiIwN2ZiOTlkNC00NzgxLTQ5YmUtOTY0MC02MGNlOGUxM2EzZWUiLCJpYXQiOjE2NDczMjU5NDEsInRva2VuX3ZhbGlkaXR5X2tleTphcGkiOiJhZDhlMWFlYy02ZDBhLTQ5ZmEtYmY4NS02MDhmYTk0ZjFmY2QiLCJ1c2VyX2lkZW50aWZpZXIiOiI1NyIsIm5iZiI6MTY0NzMyNTk0MSwiZXhwIjoxNjc4ODYxOTQxLCJpc3MiOiJWUEhvcm5vciIsImF1ZCI6IlZQSG9ybm9yIn0.tgoCFWZVqanjBeHatVt0gqkpU7ptpHON6PmJP1_SFPQ")
-	cfg.Host = testHost
+	//cfg.Host = testHost
+
+	loginModel := sw.WctApiModelsTokenAuthAuthenticateModel{
+		LoginType: 0,
+		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
+		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
+		SmsCode:   SMScode,
+		ImageKey:  "2323",
+		ImageCode: "8980"}
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	myclient := &http.Client{Transport: tr}
+	payloadBytes, err := json.Marshal(loginModel)
+	if err != nil {
+		// handle err
+	}
+	body := bytes.NewReader(payloadBytes)
+
+	req, err := http.NewRequest("POST", "https://lby-stage.flyhome.net/almadar-stage/libya-mall-backend-api/api/TokenAuth/Authenticate", body)
+	if err != nil {
+		// handle err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := myclient.Do(req)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	defer resp.Body.Close()
+	localVarBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Print(err)
+	}
+	//fmt.Printf("read resp.Body successfully:\n%v\n", string(localVarBody))
+
+	var respObj sw.WctApiModelsTokenAuthAuthenticateResultModel
+
+	jsonerr := json.Unmarshal(localVarBody, &respObj)
+	if jsonerr != nil {
+		fmt.Println("error:", jsonerr)
+		return
+	}
+
+	cfg.AddDefaultHeader("Authorization", "Bearer "+respObj.Result.AccessToken)
 	client = sw.NewAPIClient(cfg)
 	retCode := m.Run()
 	os.Exit(retCode)

@@ -21,19 +21,7 @@ const PASSWORD string = "@234qwer"
 
 func TestLogin(t *testing.T) {
 
-	loginModel := sw.WctApiModelsTokenAuthAuthenticateModel{
-		LoginType: 0,
-		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
-		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
-		SmsCode:   SMScode,
-		ImageKey:  "2323",
-		ImageCode: "8980"}
-
-	loginModelpost := sw.TokenAuthApiApiTokenAuthAuthenticatePostOpts{
-		Body: optional.NewInterface(loginModel),
-	}
-
-	resp, r, err := client.TokenAuthApi.ApiTokenAuthAuthenticatePost(context.Background(), &loginModelpost)
+	resp, r, err := LoginProc()
 	assert := assert.New(t)
 	if err != nil {
 		t.Errorf("Error while get Login")
@@ -46,6 +34,23 @@ func TestLogin(t *testing.T) {
 		t.Log(err)
 	}
 
+}
+
+func LoginProc() (sw.WctApiModelsTokenAuthAuthenticateResultModel, *http.Response, error) {
+
+	loginModel := sw.WctApiModelsTokenAuthAuthenticateModel{
+		LoginType: 0,
+		UserName:  base64.StdEncoding.EncodeToString([]byte("ZtfyRZxPsG@gmail.com")),
+		Password:  base64.StdEncoding.EncodeToString([]byte(PASSWORD)),
+		SmsCode:   SMScode,
+		ImageKey:  "2323",
+		ImageCode: "8980"}
+
+	loginModelpost := sw.TokenAuthApiApiTokenAuthAuthenticatePostOpts{
+		Body: optional.NewInterface(loginModel),
+	}
+
+	return client.TokenAuthApi.ApiTokenAuthAuthenticatePost(context.Background(), &loginModelpost)
 }
 
 func TestRegister(t *testing.T) {
