@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"os"
 	"testing"
+
+	_ "go.uber.org/automaxprocs"
 )
 
 var client *sw.APIClient
