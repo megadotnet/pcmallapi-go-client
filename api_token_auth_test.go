@@ -47,8 +47,8 @@ func LoginProc() (sw.WctApiModelsTokenAuthAuthenticateResultModel, *http.Respons
 }
 
 func TestRegister(t *testing.T) {
-
-	resp, r, err := CreateRegisterProc(t)
+	timen := time.Now() //It will return time.Time object with current timestamp
+	resp, r, err := CreateRegisterProc(t, timen.UnixNano())
 	assert := assert.New(t)
 	if err != nil {
 		t.Errorf("Error while get TestRegister")
@@ -64,9 +64,10 @@ func TestRegister(t *testing.T) {
 func TestRegisterConcurrency(t *testing.T) {
 	errc := make(chan error)
 	sum := 0
-	for i := 0; i <= 200; i++ {
+	timen := time.Now() //It will return time.Time object with current timestamp
+	for i := 0; i <= 250; i++ {
 		go func() {
-			resp, r, err := CreateRegisterProc(t)
+			resp, r, err := CreateRegisterProc(t, timen.UnixNano())
 			if err != nil {
 				t.Errorf("Error while get TestRegister")
 				t.Log(err, r, resp)
@@ -80,10 +81,10 @@ func TestRegisterConcurrency(t *testing.T) {
 }
 
 //create random customer accout by phonenumber
-func CreateRegisterProc(t *testing.T) (bool, *http.Response, error) {
+func CreateRegisterProc(t *testing.T, timen int64) (bool, *http.Response, error) {
 
 	registerModel := sw.WctApiApplicationAuthorizationDtoRegisterModel{
-		BindAccount: RandStringBytesMaskImprSrcSB(16) + "@gmail.com",
+		BindAccount: RandStringBytesMaskImprSrcSB(16) + strconv.FormatInt(int64(time.Nanosecond)*timen/int64(time.Microsecond), 10) + "@gmail.com",
 		SmsCode:     SMScode,
 		Password:    PASSWORD}
 
