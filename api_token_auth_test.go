@@ -65,7 +65,7 @@ func TestRegisterConcurrency(t *testing.T) {
 	errc := make(chan error)
 	sum := 0
 	timen := time.Now() //It will return time.Time object with current timestamp
-	for i := 0; i <= 100; i++ {
+	for i := 0; i <= 10; i++ {
 		go func() {
 			resp, r, err := CreateRegisterProc(t, timen.UnixNano())
 			if err != nil {
