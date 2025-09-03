@@ -13,6 +13,7 @@ require (
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	go.uber.org/automaxprocs v1.4.0 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/tools v0.1.9 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
